@@ -4,11 +4,13 @@ Created on Wed Nov 24 13:42:55 2021
 
 @author: Ali Tazribine
 """
+import math
+
 import numpy as np
 import random as rnd
 import scipy as sp
 import glob
-#import audiofile
+import audiofile
 import scikit_talkbox_lpc as lpc
 
 """The signal’s sample values are scaled between a
@@ -65,7 +67,7 @@ def compute_energy(signal):
     sum=0
     i=0
     while(i<len(signal)):
-        x=(np.abs(signal[i])**2)
+        x=(abs(signal[i])**2)
         sum+=x
         i+=1
     return sum
