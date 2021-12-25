@@ -103,25 +103,56 @@ def is_voiced(signal,th,energy=None):
         energy=compute_energy(signal)
     return energy>th
 
-def get_threshold(list_energies):
-    """
-    Parameters
-    ----------
-    list_energies : array_like
-        contains the energy of each frame
-    ----------
-    """
-    th=None
-    i=1
-    while(i<len(list_energies)-1):
-        if(list_energies[i]>list_energies[i-1] and list_energies[i]> list_energies[i+1]):
-            if(th != None):
-               if (list_energies[i]>th):
-                   th=list_energies[i]
+def pitch_cepstrum(speaker_man,speaker_woman) :
+    speakers=speaker_man+speaker_woman
+    maxf0speaker=[]
+    #on transforme les fichiers en signaux
+    for i in (speakers):
+        info_signal=audiofile.read(i)
+        signal=info_signal[0]
+        fs=info_signal[1]
+        #On normalise le signal
+        normalized_signal=normalize(signal)
+        #plt.plot(normalized_signal)
+        #On le divise
+        splitted_signal=split(normalized_signal, 50,50,fs)
+        energies=[]
+        #On crée une liste avec l'énergie de toutes les frames
+        for j in splitted_signal:
+            energy=compute_energy(j)
+            energies.append(energy)
+        #On choisi un seuil(graphiquement)
+        th=20
+        voiced_frames=[]
+        #On crée une liste avec les indices des "voiced_frames"
+        for j in range(len(energies)):
+            if is_voiced(None, th,energies[j]):
+                voiced_frames.append(j)
+        #On calcule le cepstrum des voiced frames
+        cepstrum_list=[]
+        for j in voiced_frames:
+            freq_resp=np.fft.fft(splitted_signal[j])
+            logfft=np.log10(freq_resp)
+            cepstrum=np.fft.ifft(logfft)
+            cepstrum_list.append(cepstrum)
+        #On calcule les f0
+        listf0=[]
+        k=0
+        for j in range(len(splitted_signal)):
+            if j in voiced_frames:
+                max_cep=max(cepstrum_list[k])
+                k+=1
+                angle=(np.arctan2(np.imag(max_cep), np.real(max_cep)))
+                freq=angle*fs/2*np.pi
+                if(freq<50):
+                    listf0.append(50)
+                else:
+                    listf0.append(freq)
             else:
-                th=list_energies[i]
-        i+=1
-    return th
+                listf0.append(0)
+        #print(listf0)
+        maxf0speaker.append(max(listf0))
+    return maxf0speaker
 
 def formants(signal,width,slidingstep,fs):
     frames=split(signal, width, slidingstep, fs)
@@ -129,7 +160,7 @@ def formants(signal,width,slidingstep,fs):
     #filtered_frames=[]
     roots=[]
     for frame in frames :
-        filtered_frame=sp.lfilter(b,a,frame)
+        filtered_frame=sp.signal.lfilter(b,a,frame)
         win=np.hamming(len(filtered_frame))
         filtered_frame=filtered_frame*win
         #filtered_frames.append(filtered_frame)
@@ -139,23 +170,9 @@ def formants(signal,width,slidingstep,fs):
             im=np.imag(root[i])
             if(im>0):
                 roots.append(root[i])
-    angles=np.arctan2(np.imag[roots], np.real(roots))
+    angles=np.arctan2(np.imag(roots), np.real(roots))
     frequencies=sorted(angles*fs/2*np.pi)
     return frequencies
-
-def rule_based_system():
-    speaker_man = get_random_speakers('bdl',15)
-    speaker_woman = get_random_speakers('slt',15)
-    for i in speaker_man :
-        info_signal=audiofile.read(i)
-        signal=info_signal[0]
-        fs=info_signal[1]
-        print("man formants : "+str(formants(signal,35,35,fs)))
-    for i in speaker_woman:
-        info_signal=audiofile.read(i)
-        signal=info_signal[0]
-        fs=info_signal[1]
-        print("woman formants:"+str(formants(signal,35,35,fs)))
     
         
         
