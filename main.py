@@ -42,7 +42,7 @@ def rule_based_system_observation():
 #On va donc définir nos règles à partir du formant et du pitch :
 def rules(formant,pitch,formantok,pitchok,man):
 
-    if(formant<600):
+    if(formant<300):
         print("Following the formant, the speaker seems to be a women")
         if(not man):
             formantok+=1
