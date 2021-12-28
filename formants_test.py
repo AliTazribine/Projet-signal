@@ -9,7 +9,7 @@ import Utils
 import audiofile
 
 speaker=Utils.get_random_speakers('slt',1)
-sig,fs=audiofile.read(speaker)
+sig,fs=audiofile.read(speaker[0])
 
 formant_list=Utils.formants(sig, 30, 30, fs)
 sort=True
@@ -21,4 +21,5 @@ for i in range(len(formant_list)-1):
     else:
         if(formant_list[i]<formant_list[i-1] or formant_list[i]>formant_list[i+1]):
             sort=False
-print(sort)
+if(sort):
+    print("La liste de formants est bien triée")
