@@ -23,3 +23,5 @@ for i in range(len(formant_list)-1):
             sort=False
 if(sort):
     print("La liste de formants est bien triée")
+else :
+    print("La liste n'est pas triée")
