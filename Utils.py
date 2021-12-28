@@ -103,8 +103,15 @@ def is_voiced(signal,th,energy=None):
         energy=compute_energy(signal)
     return energy>th
 
-def pitch_cepstrum(speaker_man,speaker_woman) :
-    speakers=speaker_man+speaker_woman
+
+"""
+Calcule le pitch des audios entrés en paramètres
+
+Parameters :
+    speakers : list
+        contient les audios pour lesquels il faut calculer le pitch
+"""
+def pitch_cepstrum(speakers) :
     maxf0speaker=[]
     #on transforme les fichiers en signaux
     for i in (speakers):

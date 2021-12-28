@@ -14,7 +14,8 @@ import numpy as np
 def rule_based_system_observation():
     speakers_man = Utils.get_random_speakers('bdl',15)
     speakers_woman = Utils.get_random_speakers('slt',15)
-    pitch_list=Utils.pitch_cepstrum(speakers_man,speakers_woman)
+    speakers=speakers_woman+speakers_man
+    pitch_list=Utils.pitch_cepstrum(speakers)
     c1=0
     c2=0
     for i in range(len(speakers_woman)):
