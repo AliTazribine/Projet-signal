@@ -7,9 +7,15 @@ Created on Wed Dec 15 16:20:03 2021
 
 import Utils
 
-th=160
-signal=[15,45,54,32,10]
+th=30
+signal1=[1,2,3,4]
+resp1=False
+signal2=[23,34,43,23]
+resp2=True
 
-test=Utils.is_voiced(signal, th)
-if((15+45+54+32+10<160) == test):
-    print("le calcul est bon")
+test1=Utils.is_voiced(signal1, th)
+test2=Utils.is_voiced(signal2, th)
+
+if(test1==resp1 and test2==resp2):
+    print("Cette fonction détecte bien si un signal est voisé")
+
