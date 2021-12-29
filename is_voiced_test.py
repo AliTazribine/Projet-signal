@@ -18,4 +18,5 @@ test2=Utils.is_voiced(signal2, th)
 
 if(test1==resp1 and test2==resp2):
     print("Cette fonction détecte bien si un signal est voisé")
-
+else :
+    print("La fonction ne détecte pas bien si un signal est voisé")

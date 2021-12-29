@@ -37,6 +37,8 @@ def split(signal,width,slidingstep,fs):
         the input signal
     width: int
         the width of the window [ms]
+    slidingstep : int
+        the sliding step of the window [ms]
     fs: float
         the sampling frequency
     ----------
@@ -55,7 +57,7 @@ def split(signal,width,slidingstep,fs):
     output=np.array(output)
     return output
 
-
+"""The energy of a signal is computed"""
 def compute_energy(signal):
     """
     Parameters
@@ -72,10 +74,13 @@ def compute_energy(signal):
         i+=1
     return sum
 
+"""This function return a list of paths of random speakers"""
 def get_random_speakers(gender,nbr=5):
     """
     Parameters
     ----------
+    gender : String
+        the gender of the speaker
     nbr : int
         numbers of files to choose
     ----------
@@ -87,6 +92,7 @@ def get_random_speakers(gender,nbr=5):
         speakers.append(path[i])
     return speakers
 
+"""This function return True if the signal is voiced"""
 def is_voiced(signal,th,energy=None):
     """
     Parameters
@@ -104,14 +110,13 @@ def is_voiced(signal,th,energy=None):
     return energy>th
 
 
-"""
-Calcule le pitch des audios entrés en paramètres
-
-Parameters :
-    speakers : list
-        contient les audios pour lesquels il faut calculer le pitch
-"""
+"""Compute the pitch of the signals of the speakers"""
 def pitch_cepstrum(speakers) :
+    """
+    Parameters :
+        speakers : list
+            contient les audios pour lesquels il faut calculer le pitch
+    """
     maxf0speaker=[]
     #on transforme les fichiers en signaux
     for i in (speakers):
@@ -161,7 +166,19 @@ def pitch_cepstrum(speakers) :
         maxf0speaker.append(max(listf0))
     return maxf0speaker
 
+"""Compute the formants of a signal"""
 def formants(signal,width,slidingstep,fs):
+    """
+    Parameters :
+        signal : array_like
+            the signal
+        width: int
+            the width of the window [ms] for the splitting
+        slidingstep : int
+            the sliding step of the window [ms] for the splitting
+        fs: float
+            the sampling frequency for the splitting
+    """
     frames=split(signal, width, slidingstep, fs)
     b,a=[1,0.67],[1,0]
     #filtered_frames=[]

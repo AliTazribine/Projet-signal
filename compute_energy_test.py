@@ -9,4 +9,7 @@ import Utils
 
 signal=[1,2,3,4,5]
 energy=1+4+9+16+25
-print(Utils.compute_energy(signal)==energy)
+if(Utils.compute_energy(signal)==energy):
+    print("La formule de calcul de l'énergie est bien respectée")
+else :
+    print("La formule n'est pas respectée")
