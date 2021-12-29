@@ -134,7 +134,7 @@ def pitch_cepstrum(speakers) :
             energy=compute_energy(j)
             energies.append(energy)
         #On choisi un seuil(graphiquement)
-        th=20
+        th=15
         voiced_frames=[]
         #On crée une liste avec les indices des "voiced_frames"
         for j in range(len(energies)):
